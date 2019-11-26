@@ -4,7 +4,7 @@
   "description": "Convenient base Error class and common subclasses, including message, code, info & cause.",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/northscaler-public/string-support.git"
+    "url": "https://gitlab.com/northscaler-public/error-support.git"
   },
   "keywords": [
     "string",
