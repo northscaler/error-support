@@ -26,8 +26,8 @@ describe('unit tests of CodedError', function () {
     expect(e.code).to.equal(code)
     expect(e.code).to.equal(MyError.CODE)
     expect(e.message).to.equal(`${code}: ${msg}`)
-    expect(MyError.isInstance(e)).to.equal(true)
-    expect(MyError.isInstance()).not.to.be.ok()
+    expect(e instanceof MyError).to.equal(true)
+    expect(e instanceof Error).to.equal(true)
     console.error(e)
   })
 

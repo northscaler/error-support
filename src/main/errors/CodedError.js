@@ -19,7 +19,8 @@ function message (code, msg, cause) {
 }
 
 /**
- * A base error class.
+ * A base error class that has a `cause` property, forming a chain of `Error`s.
+ * Also has an `info` property for arbitrary contextual information.
  */
 class CodedError extends Error {
   /**
@@ -29,7 +30,9 @@ class CodedError extends Error {
    * @param {string} [msg] An optional message.
    * @param {*} [info] An optional value of any kind.
    * @param {string} [_n]  A name for instances of this class.
+   * Not intended for public consumption.
    * @param {string} [_c] A code for instances of this class.
+   * Not intended for public consumption.
    */
   constructor ({ cause, msg, info, _n, _c } = {}) {
     super(message(_c, msg, cause))
@@ -58,21 +61,7 @@ const defineErrorClass = ({ code, name, supererror }) => {
 
   const C = {
     [name]: class extends (supererror || CodedError) {
-      static isInstance (it) {
-      // if (it instanceof C) return true
-        if (!it) return it
-        if (it.name === name) return true
-
-        let proto = it.constructor
-        while (proto && proto.name !== 'CodedError') {
-          if (proto.name === name) return true
-          proto = Object.getPrototypeOf(proto)
-        }
-
-        return false
-      }
-
-      /**
+    /**
      * Constructs a new instance of this class.
      *
      * @param {Error} [cause] An optional cause of this error.
