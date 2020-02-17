@@ -20,6 +20,7 @@ This is a partial list of common error classes provided by this module:
 
 There may be more than these.
 Check the source for all errors provided by this module.
+All error classes can be found in `./errors`.
 
 Usage example of an error provided by this module:
 ```javascript

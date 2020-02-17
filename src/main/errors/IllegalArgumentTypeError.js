@@ -2,4 +2,9 @@
 
 const IllegalArgumentError = require('./IllegalArgumentError')
 
-module.exports = IllegalArgumentError.subclass({ name: 'IllegalArgumentTypeError' })
+/**
+ * Error class indicating that the type of the argument given is illegal.
+ */
+const E = IllegalArgumentError.subclass({ name: 'IllegalArgumentTypeError' })
+
+module.exports = E

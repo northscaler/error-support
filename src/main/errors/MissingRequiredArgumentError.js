@@ -2,4 +2,9 @@
 
 const IllegalArgumentError = require('./IllegalArgumentError')
 
-module.exports = IllegalArgumentError.subclass({ name: 'MissingRequiredArgumentError' })
+/**
+ * Error class indicating that a required argument is missing.
+ */
+const E = IllegalArgumentError.subclass({ name: 'MissingRequiredArgumentError' })
+
+module.exports = E
