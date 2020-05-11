@@ -41,7 +41,9 @@
   },
   "files": [
     "dist/",
-    "docs/"
+    "docs/",
+    "src/",
+    "index.js"
   ],
   "publishConfig": {
     "access": "public"
