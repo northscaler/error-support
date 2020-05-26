@@ -24,7 +24,7 @@ All error classes can be found in `./errors`.
 
 Usage example of an error provided by this module:
 ```javascript
-const IllegalArgumentError = require('@northscaler/error-support/errors/IllegalArgumentError')
+const IllegalArgumentError = require('@northscaler/error-support').IllegalArgumentError
 throw new IllegalArgumentError({msg: 'foobar'})
 ```
 
@@ -36,7 +36,7 @@ Here is an example of defining your own error classes using `CodedError`:
 ```javascript
 // in file SomethingWickedError.js:
 
-const CodedError = require('@northscaler/error-support/errors/CodedError')
+const CodedError = require('@northscaler/error-support').CodedError
 
 module.exports = CodedError({ code: 'E_SOMETHING_WICKED' })
 ```
