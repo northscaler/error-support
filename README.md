@@ -3,7 +3,7 @@ Convenient error classes and error class factories.
 
 In addition to providing many common errors, this module provides a convenient function for creating `Error` subclasses that include additional properties
 * `code` to hold a programmatic symbol representing the error,
-* `cause` to hold the causing `Error`, and
+* `cause` to hold the causing `Error` or `Error[]`, and
 * `info` to hold any contextual information you may want to include.
 
 ## Common error classes
