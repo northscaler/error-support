@@ -145,6 +145,34 @@ describe('unit tests of CodedError', function () {
     console.error(e)
   })
 
+  it('should have a cause array and code as name', () => {
+    const causeName0 = 'MyCause0Error'
+    const causeCode0 = 'E_MY_CAUSE0'
+    const causeName1 = 'MyCause1Error'
+    const causeCode1 = 'E_MY_CAUSE1'
+    const name = 'MyError'
+    const code = 'E_MY'
+
+    const MyCause0Error = CodedError({ name: causeName0 })
+    const MyCause1Error = CodedError({ name: causeName1 })
+    const MyError = CodedError({ name })
+
+    const msg = 'boom'
+    const causeMsg0 = 'because many badness so high'
+    const cause0 = new MyCause0Error({ msg: causeMsg0 })
+    const causeMsg1 = 'because stuff very bad'
+    const cause1 = new MyCause1Error({ msg: causeMsg1 })
+    const e = new MyError({ msg, cause: [cause0, cause1] })
+    expect(e).to.be.instanceOf(Error)
+    expect(e).to.be.instanceOf(MyError)
+    expect(MyError.CODE).to.equal(code)
+    expect(MyCause0Error.CODE).to.equal(causeCode0)
+    expect(e.name).to.equal(name)
+    expect(e.code).to.equal(code)
+    expect(e.message).to.equal(`${code}: ${msg}: ${causeCode0}: ${causeMsg0}, ${causeCode1}: ${causeMsg1}`)
+    console.error(e)
+  })
+
   it('should work with no args', () => {
     const causeName = 'MyCauseError'
     const causeCode = 'E_MY_CAUSE'
