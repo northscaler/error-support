@@ -7,12 +7,13 @@ const { toUpperSnake, toUpperCamel } = require('@northscaler/string-support')
  *
  * @param {string} code The error code.
  * @param {string} [msg] The error message.
- * @param {Error} [cause] The error's cause.
+ * @param {Error|Error[]} [cause] The error's cause.
  * @return {string} The formatted error message.
  */
 function message (code, msg, cause) {
   let m = code
   if (msg) m += `: ${msg}`
+  if (cause && Array.isArray(cause)) m += `: ${cause.map(it => it.message).join(', ')}`
   if (cause?.message) m += `: ${cause?.message}`
 
   return m
@@ -26,7 +27,7 @@ class CodedError extends Error {
   /**
    * Constructs a new instance of this class.
    *
-   * @param {Error} [cause] An optional cause of this error.
+   * @param {Error|Error[]} [cause] An optional cause of this error.
    * @param {string} [msg] An optional message.
    * @param {*} [info] An optional value of any kind.
    * @param {string} [_n]  A name for instances of this class.
