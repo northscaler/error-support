@@ -1,6 +1,6 @@
 {
   "name": "@northscaler/error-support",
-  "version": "3.2.4-rc.0",
+  "version": "3.2.4",
   "description": "Convenient base Error class and common subclasses, including message, code, info & cause.",
   "repository": {
     "type": "git",
