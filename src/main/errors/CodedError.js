@@ -46,10 +46,10 @@ class CodedError extends Error {
 
     if (Array.isArray(cause)) {
       m += `: [${cause
-      .map(it => it instanceof Error ? it?.message || CodedError.NO_MESSAGE : it)
-      .filter(it => it !== null && it !== undefined)
-      .join(', ')
-    }]`
+        .map(it => it instanceof Error ? it?.message || CodedError.NO_MESSAGE : it)
+        .filter(it => it !== null && it !== undefined)
+        .join(', ')
+      }]`
     } else {
       m += cause
         ? `: ${cause instanceof Error ? (cause?.message || CodedError.NO_MESSAGE) : cause}`
@@ -240,11 +240,35 @@ class CodedError extends Error {
 }
 
 /**
+ * Derives a code & name if necessary from the given code & name.
+ * @param code
+ * @param name
+ * @return {{code: string, name: string}}
+ * @private
+ */
+function _determineCodeAndName ({ code, name }) {
+  if (!name && !code) throw new Error('name or code is required')
+
+  if (name && !code) code = `E_${toUpperSnake(name)}`.replace(/_ERROR$/, '')
+
+  if (code && !name) {
+    name = toUpperCamel(code.replace(/^E_/, ''))
+    if (!name.endsWith('Error')) name = `${name}Error`
+  }
+
+  return { code, name }
+}
+
+/**
  * Defines a new error class.
  *
  * @param {Object} arg0 The argument to be deconstructed.
- * @param {string} [arg0.name]  A name for instances of this class
+ * @param {string} [arg0.name]  A name for instances of this class.
+ * This argument must be present if `arg0.code` is missing, and the code becomes the upper-cased snake format of the name.
+ * For example, passing the name `SomethingWickedError` causes the `code` to be `E_SOMETHING_WICKED`.
  * @param {string} [arg0.code] A code for instances of this class
+ * This argument must be present if `arg0.name` is missing.
+ * For example, passing the code `E_SOMETHING_WICKED` causes the `name` to be `SomethingWickedError`.
  * @param {*} [arg0.supererror] An optional superclass previously returned by this function.
  */
 const defineErrorClass = ({
@@ -252,12 +276,9 @@ const defineErrorClass = ({
   name,
   supererror
 }) => {
-  if (!name && !code) throw new Error('name or code is required')
-  if (name && !code) code = `E_${toUpperSnake(name)}`.replace(/_ERROR$/, '')
-  if (code && !name) {
-    name = toUpperCamel(code.replace(/^E_/, ''))
-    if (!name.endsWith('Error')) name = `${name}Error`
-  }
+  const codename = _determineCodeAndName({ code, name })
+  code = codename.code
+  name = codename.name
 
   const C = {
     [name]: class extends (supererror || CodedError) {
