@@ -8,8 +8,20 @@ const expect = chai.expect
 const CodedError = require('../../../main/errors/CodedError')
 
 describe('unit tests of CodedError', function () {
-  it('should throw if no name or code', () => {
+  it('should derive code & name correctly', () => {
     expect(() => CodedError({})).to.throw()
+
+    expect((new (CodedError({ code: 'E_FOOBAR' }))()).name).to.equal('FoobarError')
+    expect((new (CodedError({ name: 'FoobarError' }))()).code).to.equal('E_FOOBAR')
+
+    expect((new (CodedError({ code: 'E_FOO_BAR' }))()).name).to.equal('FooBarError')
+    expect((new (CodedError({ name: 'FooBarError' }))()).code).to.equal('E_FOO_BAR')
+
+    expect((new (CodedError({ code: 'FOOBAR' }))()).name).to.equal('FoobarError')
+    expect((new (CodedError({ name: 'Foobar' }))()).code).to.equal('E_FOOBAR')
+
+    expect((new (CodedError({ code: 'FOOBAR', name: 'Snafu' }))()).name).to.equal('Snafu')
+    expect((new (CodedError({ name: 'Foobar', code: 'SNAFU' }))()).code).to.equal('SNAFU')
   })
 
   it('should have static members available', function () {

@@ -33,7 +33,14 @@ throw new IllegalArgumentError({msg: 'foobar'})
 ## Error class factory
 This folder contains a base error class, `CodedError`, upon which are built many other convenient error classes.
 
-Here is an example of defining your own error classes using `CodedError`:
+Here is an example of defining your own error classes using `CodedError`.
+
+> NOTE: You must supply either `code` or `name` to the class factory.
+> If you give `name`, the `code` will be generated as an upper-case snake format of the name with `E_` prepended and the `Error` suffix removed, if present.
+> If you give `code`, the `name` will be the leading-upper camel casing of the `code`, with the leading `E_` removed, if present, and the suffix `Error` will be appended.
+> For example, `code` `E_FOOBAR` causes the `name` to be `FoobarError`.
+> Giving `name` `BadnessError` causes the `code` to be `E_BADNESS`.
+> If you don't like these defaults, simply provide both `name` & `code` yourself.
 
 ```javascript
 // in file SomethingWickedError.js:
@@ -41,6 +48,7 @@ Here is an example of defining your own error classes using `CodedError`:
 const CodedError = require('@northscaler/error-support').CodedError
 
 module.exports = CodedError({ code: 'E_SOMETHING_WICKED' })
+// or module.exports = CodedError({ name: 'SomethingWickedError' })
 ```
 
 You then use the class like this:
