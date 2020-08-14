@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.10.4",
-    "@northscaler/string-support": "3.1.18"
+    "@northscaler/string-support": "3.1.19"
   },
   "devDependencies": {
     "@babel/cli": "7.10.5",
@@ -61,7 +61,7 @@
     "@babel/register": "7.10.5",
     "@babel/traverse": "7.11.0",
     "@babel/types": "7.11.0",
-    "acorn": "7.4.0",
+    "acorn": "8.0.1",
     "babel-eslint": "10.1.0",
     "chai": "4.2.0",
     "copyfiles": "2.3.0",
