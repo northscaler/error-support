@@ -26,21 +26,14 @@ All error classes can be found in `./errors`.
 
 Usage example of an error provided by this module:
 ```javascript
-const IllegalArgumentError = require('@northscaler/error-support').IllegalArgumentError
-throw new IllegalArgumentError({msg: 'foobar'})
+const { IllegalArgumentError } = require('@northscaler/error-support')
+throw new IllegalArgumentError({msg: 'foobar', info: {sna: 'fu'}})
 ```
 
 ## Error class factory
 This folder contains a base error class, `CodedError`, upon which are built many other convenient error classes.
 
 Here is an example of defining your own error classes using `CodedError`.
-
-> NOTE: You must supply either `code` or `name` to the class factory.
-> If you give `name`, the `code` will be generated as an upper-case snake format of the name with `E_` prepended and the `Error` suffix removed, if present.
-> If you give `code`, the `name` will be the leading-upper camel casing of the `code`, with the leading `E_` removed, if present, and the suffix `Error` will be appended.
-> For example, `code` `E_FOOBAR` causes the `name` to be `FoobarError`.
-> Giving `name` `BadnessError` causes the `code` to be `E_BADNESS`.
-> If you don't like these defaults, simply provide both `name` & `code` yourself.
 
 ```javascript
 // in file SomethingWickedError.js:
@@ -50,6 +43,13 @@ const CodedError = require('@northscaler/error-support').CodedError
 module.exports = CodedError({ code: 'E_SOMETHING_WICKED' })
 // or module.exports = CodedError({ name: 'SomethingWickedError' })
 ```
+
+> NOTE: You must supply either `code` or `name` to the class factory.
+> If you give `name`, the `code` will be generated as an upper-case snake format of the name with `E_` prepended and the `Error` suffix removed, if present.
+> If you give `code`, the `name` will be the leading-upper camel casing of the `code`, with the leading `E_` removed, if present, and the suffix `Error` will be appended.
+> For example, `code` `E_FOOBAR` causes the `name` to be `FoobarError`.
+> Giving `name` `BadnessError` causes the `code` to be `E_BADNESS`.
+> If you don't like these defaults, simply provide both `name` & `code` yourself.
 
 You then use the class like this:
 ```javascript
@@ -98,11 +98,12 @@ Unfortunately, JavaScript's `Error` class only supports `name` (if you set it) &
 Folks haven't been exactly disciplined when it comes to the format of the `message` property.
 
 A common solution to this is to subclass `Error` with one that supports a `code` property (among others, possibly).
+This is exactly what this library does, and more.
+
 The `code` is guaranteed never to change, whereas the `message` can.
 Also, `code` can be anything you like, but we recommend `string`s like `E_SOMETHING_BAD`.
 `Symbol`s or `number`s aren't a bad idea, but `Symbol`s don't `toString()` very well, and you always have to go look up a `number` to see what it means.
 
-This is exactly what this library does.
 In Node.js, there is [a well known issue](https://github.com/nodejs/node/issues/13937) that discusses this.
 
 > NOTE: never depend on the `message` property's content.
