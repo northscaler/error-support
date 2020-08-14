@@ -95,7 +95,7 @@ class CodedError extends Error {
    * @param {string|string[]|boolean} [arg0.omitting=[]] The property names to omit recursively during (@link CodedError#toObject}.
    * If a `boolean`, whether to omit `stack` if `true`, or include `stack` if `false.
    * If a property is omitted, its value is explicitly set to `null`, as apposed to `undefined`, in an effort to communicate that it was present but actively omitted.
-   * @return {{stack: (string|undefined), name: string, message: string}|{}|{stack: (string|undefined), code: string, name: string, cause: ({stack: (string|undefined), code: string, name: string, cause: (*[]|*|{stack: (string|undefined), name: string, message: string}), message: string, info: *}|{stack: (string|undefined), name: string, message: string}|{}|*), message: string, info: *}|*}
+   * @return {object}
    * @private
    */
   static _anyToObject ({
@@ -182,7 +182,7 @@ class CodedError extends Error {
    * @param {string|string[]|boolean} [arg0.omitting='stack'] The property names to omit recursively during (@link CodedError#toObject}.
    * If a `boolean`, whether to omit `stack` if `true`, or include `stack` if `false`.
    * If a property is omitted, its value is explicitly set to `null`, as apposed to `undefined`, in an effort to communicate that it was present but actively omitted.
-   * @return {{stack: (string|undefined), code: string, name: string, cause: ({stack: (string|undefined), code: string, name: string, cause: (*[]|*|{stack: (string|undefined), name: string, message: string}), message: string, info: *}|{stack: (string|undefined), name: string, message: string}|{}|*), message: string, info: *}}
+   * @return {object} A plain, literal JavaScript object representation of this error.  See README.md for more information.
    */
   toObject ({
     omitting = 'stack'
@@ -212,11 +212,11 @@ class CodedError extends Error {
    * @param {string|string[]|boolean} [arg0.omitting='stack'] The property names to omit recursively during (@link CodedError#toObject}.
    * If a `boolean`, whether to omit `stack` if `true`, or include `stack` if `false.
    * If a property is omitted, its value is explicitly set to `null`, as apposed to `undefined`, in an effort to communicate that it was present but actively omitted.
-   * @param replacer
-   * @param spaces
+   * @param {function} [arg0.replacer] The [`toJSON` replacer function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to use.
+   * @param {number} [arg0.spaces] The number of spaces to use for indentation.
    * @return {string}
    */
-  tryToJson ({
+  toJson ({
     omitting = 'stack',
     replacer,
     spaces

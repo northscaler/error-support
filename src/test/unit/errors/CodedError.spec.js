@@ -271,7 +271,7 @@ describe('unit tests of CodedError', function () {
     }
 
     const e = new MyError({ msg, info })
-    const json = JSON.parse(e.tryToJson())
+    const json = JSON.parse(e.toJson())
 
     expect(json).to.deep.equal({
       jsonStringifyError: {
