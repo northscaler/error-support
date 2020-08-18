@@ -49,8 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/polyfill": "7.10.4",
-    "@northscaler/string-support": "3.1.19"
+    "@babel/polyfill": "7.10.4"
   },
   "devDependencies": {
     "@babel/cli": "7.10.5",
