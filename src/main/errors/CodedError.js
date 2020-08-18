@@ -1,6 +1,6 @@
 'use strict'
 
-const { toUpperSnake, toUpperCamel } = require('@northscaler/string-support')
+const { toUpperSnake, toUpperCamel } = require('../string-utils')
 
 /**
  * A base error class that has a `cause` property, forming a chain of `Error`s, as well as convenient message & object formatting.
