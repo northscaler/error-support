@@ -27,7 +27,7 @@ All error classes can be found in `./errors`.
 Usage example of an error provided by this module:
 ```javascript
 const { IllegalArgumentError } = require('@northscaler/error-support')
-throw new IllegalArgumentError({msg: 'foobar', info: {sna: 'fu'}})
+throw new IllegalArgumentError({message: 'foobar', info: {sna: 'fu'}})
 ```
 
 ## Error class factory
@@ -61,7 +61,7 @@ function foobar() {
   }
   catch (e) {
     throw new SomethingWickedError({
-      msg: 'boom',
+      message: 'boom',
       info: { some: 'contextual values here'},
       cause: e
     })
@@ -128,13 +128,13 @@ console.log(new BadError().message)
 This provides for a cause chain, exactly in the same manner as Java's base [`java.lang.Exception` class](https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Exception.html).
 
 ```javascript
-console.log(new BadError({msg: 'this is bad', cause: new BadError('this is why')}).message)
+console.log(new BadError({message: 'this is bad', cause: new BadError('this is why')}).message)
 // 'E_BAD: this is bad: E_BAD: this is why'
 
-console.log(new BadError({msg: 'this is bad', cause: new Error('this is why')}).message)
+console.log(new BadError({message: 'this is bad', cause: new Error('this is why')}).message)
 // 'E_BAD: this is bad: this is why'
 
-console.log(new BadError({msg: 'this is bad', cause: 13}).message)
+console.log(new BadError({message: 'this is bad', cause: 13}).message)
 // 'E_BAD: this is bad: 13'
 ```
 ## Contextual information
@@ -142,7 +142,7 @@ console.log(new BadError({msg: 'this is bad', cause: 13}).message)
 
 ```javascript
 new BadError({
-  msg: 'this is bad',
+  message: 'this is bad',
   info: {
     foo: 'bar',
     sna: { fu: 'goo' }
@@ -156,9 +156,9 @@ new BadError({
 Use the `toObject` method to convert the `CodedError` chain to a POJO.
 By default, the `stack` property is omitted transitively, but you can override that behavior via arguments to `toObject`.
 
-```jvaascript
+```javascript
 console.log(new BadError({
-  msg: 'this is bad',
+  message: 'this is bad',
   info: {
     foo: 'bar',
     sna: { fu: 'goo' }
@@ -183,7 +183,7 @@ Note that this is not the same as JavaScript's [`toJSON`](https://developer.mozi
 
 ```javascript
 new BadError({
-  msg: 'this is bad',
+  message: 'this is bad',
   info: {
     foo: 'bar',
     sna: { fu: 'goo' }
@@ -246,7 +246,7 @@ const info = {}
 info.circular = info // circular reference
 
 console.log(new BadError({
-  msg: 'this is bad',
+  message: 'this is bad',
   info
 }).toJson({ spaces: 2 }))
 

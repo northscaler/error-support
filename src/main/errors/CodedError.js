@@ -31,18 +31,18 @@ class CodedError extends Error {
    *
    * @param {object} [arg0={}] The argument to be deconstructed.
    * @param {string|number} [arg0.code=undefined] The error code; if falsey, then {@link CodedError.NO_CODE} is used.
-   * @param {string} [arg0.msg=undefined] The error message.
+   * @param {string} [arg0.message=undefined] The error message.
    * @param {*} [arg0.cause=undefined] The error's cause.
    * @return {string} The formatted error message.
    */
   static _message ({
     code,
-    msg,
+    message,
     cause
   } = {}) {
     let m = code || CodedError.NO_CODE
 
-    m += `: ${msg || CodedError.NO_MESSAGE}`
+    m += `: ${message || CodedError.NO_MESSAGE}`
 
     if (Array.isArray(cause)) {
       m += `: [${cause
@@ -285,26 +285,31 @@ const defineErrorClass = ({
       /**
        * Constructs a new instance of this class.
        *
-       * @param {Error} [cause] An optional cause of this error.
-       * @param {string} [msg] An optional message.
-       * @param {*} [info] An optional value of any kind.
-       * @param {string} [_n] An optional name for instances of this class; defaults to {@param _c}.
-       * @param {string} [_c] An optional code for instances of this class; defaults to the code value when the class was defined.
+       * @param {Object} [args0] The argument to be deconstructed.
+       * @param {Error} [args0.cause] An optional cause of this error.
+       * @param {string} [args0.message] An optional message.
+       * If both `message` and `msg` are provided, `message` takes precedence.
+       * @param {string} [args0.msg] Deprecated; use `message`.
+       * If both `message` and `msg` are provided, `message` takes precedence.
+       * @param {*} [args0.info] An optional value of any kind.
+       * @param {string} [args0._n] An optional name for instances of this class; defaults to {@param _c}.
+       * @param {string} [args0._c] An optional code for instances of this class; defaults to the code value when the class was defined.
        */
       constructor ({
         cause,
-        msg,
+        message,
         info,
         _n,
-        _c
+        _c,
+        msg
       } = {}) {
-        if (typeof arguments[0] === 'string') {
-          msg = arguments[0]
-        }
+        if (typeof arguments[0] === 'string') message = arguments[0]
+        if (!message) message = msg
+
         _c = _c || code
         _n = _n || name || _c
-        super({ cause, msg, info, _c, _n })
-        this.message = CodedError._message({ code: _c, msg, cause })
+        super({ cause, message, info, _c, _n })
+        this.message = CodedError._message({ code: _c, message, cause })
       }
     }
   }[name] // causes name of class to be value of name
