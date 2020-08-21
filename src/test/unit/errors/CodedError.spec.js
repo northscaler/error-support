@@ -405,4 +405,19 @@ describe('unit tests of CodedError', function () {
       }]
     })
   })
+
+  it('should accept a string as the argument of the constructor', function () {
+    const message = 'a message'
+
+    const MyError = CodedError({ code: 'E_FOOBAR' })
+    expect(new MyError(message).message).to.equal(`${MyError.CODE}: ${message}`)
+  })
+
+  it('should prefer message over msg in the constructor', function () {
+    const message = 'a message'
+    const msg = 'a msg'
+
+    const MyError = CodedError({ code: 'E_FOOBAR' })
+    expect(new MyError({ message, msg }).message).to.equal(`${MyError.CODE}: ${message}`)
+  })
 })
