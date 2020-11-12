@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1><code>error-support</code></h1>
+<p>Convenient error classes and error class factories.</p>
+<p>In addition to providing many common errors, this module provides a convenient function for creating <code>Error</code> subclasses that include additional properties</p>
+<ul>
+<li><code>code</code> to hold a programmatic symbol representing the error,</li>
+<li><code>cause</code> to hold the causing <code>Error</code> or <code>Error[]</code>, and</li>
+<li><code>info</code> to hold any contextual information you may want to include.</li>
+</ul>
+<p>Further, each error provides a <code>toObject</code> method that converts the error to a plain object literal and a <code>toJson</code> method that is guaranteed not to throw, because you don't want errors being thrown during your error handling.</p>
+<h2>Common error classes</h2>
+<p>This is a partial list of common error classes provided by this module:</p>
+<ul>
+<li><code>AlreadyInitializedError</code></li>
+<li><code>ClassNotExtendableError</code></li>
+<li><code>IllegalArgumentError</code></li>
+<li><code>IllegalArgumentTypeError</code></li>
+<li><code>IllegalStateError</code></li>
+<li><code>MethodNotImplementedError</code></li>
+<li><code>MissingRequiredArgumentError</code></li>
+<li><code>NotInitializedError</code></li>
+</ul>
+<p>There may be more than these if this documentation isn't in sync with the code.
+Check the source for all errors provided by this module.
+All error classes can be found in <code>./errors</code>.</p>
+<p>Usage example of an error provided by this module:</p>
+<pre class="prettyprint source lang-javascript"><code>const IllegalArgumentError = require('@northscaler/error-support').IllegalArgumentError
+throw new IllegalArgumentError({msg: 'foobar'})
+</code></pre>
+<h2>Error class factory</h2>
+<p>This folder contains a base error class, <code>CodedError</code>, upon which are built many other convenient error classes.</p>
+<p>Here is an example of defining your own error classes using <code>CodedError</code>.</p>
+<blockquote>
+<p>NOTE: You must supply either <code>code</code> or <code>name</code> to the class factory.
+If you give <code>name</code>, the <code>code</code> will be generated as an upper-case snake format of the name with <code>E_</code> prepended and the <code>Error</code> suffix removed, if present.
+If you give <code>code</code>, the <code>name</code> will be the leading-upper camel casing of the <code>code</code>, with the leading <code>E_</code> removed, if present, and the suffix <code>Error</code> will be appended.
+For example, <code>code</code> <code>E_FOOBAR</code> causes the <code>name</code> to be <code>FoobarError</code>.
+Giving <code>name</code> <code>BadnessError</code> causes the <code>code</code> to be <code>E_BADNESS</code>.
+If you don't like these defaults, simply provide both <code>name</code> &amp; <code>code</code> yourself.</p>
+</blockquote>
+<pre class="prettyprint source lang-javascript"><code>// in file SomethingWickedError.js:
+
+const CodedError = require('@northscaler/error-support').CodedError
+
+module.exports = CodedError({ code: 'E_SOMETHING_WICKED' })
+// or module.exports = CodedError({ name: 'SomethingWickedError' })
+</code></pre>
+<p>You then use the class like this:</p>
+<pre class="prettyprint source lang-javascript"><code>const SomethingWickedError = require('./SomethingWickedError')
+
+function foobar() {
+  try {
+    // ...
+  }
+  catch (e) {
+    throw new SomethingWickedError({
+      msg: 'boom',
+      info: { some: 'contextual values here'},
+      cause: e
+    })
+  }
+}
+
+function example() {
+  try {
+    foobar()
+  } catch (e) {
+    if (e.code === SomethingWickedError.CODE) { // 'E_SOMETHING_WICKED'
+      // ...
+    }
+  }
+}
+</code></pre>
+<h3>Error subclass factory</h3>
+<p>You can also easily create subclasses of <code>CodedError</code> subclasses that were created from the <code>CodedError</code> class factory.</p>
+<p>Here's how, using the <code>SomethingWickedError</code> class above:</p>
+<pre class="prettyprint source lang-javascript"><code>// in file SomethingReallyWickedError.js:
+
+const SomethingWickedError = require('./SomethingWickedError')
+
+module.exports = SomethingWickedError.subclass({ code: 'E_SOMETHING_REALLY_WICKED' })
+</code></pre>
+<p>Now, any instance of <code>SomethingReallyWicked</code> is also an <code>instanceof SomethingWicked</code>.</p>
+<h2>Codes</h2>
+<p>Unfortunately, JavaScript's <code>Error</code> class only supports <code>name</code> (if you set it) &amp; <code>message</code> to convey error information in a standard way.
+Folks haven't been exactly disciplined when it comes to the format of the <code>message</code> property.</p>
+<p>A common solution to this is to subclass <code>Error</code> with one that supports a <code>code</code> property (among others, possibly).
+The <code>code</code> is guaranteed never to change, whereas the <code>message</code> can.
+Also, <code>code</code> can be anything you like, but we recommend <code>string</code>s like <code>E_SOMETHING_BAD</code>.
+<code>Symbol</code>s or <code>number</code>s aren't a bad idea, but <code>Symbol</code>s don't <code>toString()</code> very well, and you always have to go look up a <code>number</code> to see what it means.</p>
+<p>This is exactly what this library does.
+In Node.js, there is <a href="https://github.com/nodejs/node/issues/13937">a well known issue</a> that discusses this.</p>
+<blockquote>
+<p>NOTE: never depend on the <code>message</code> property's content.
+Always use the <code>code</code> property in your error handling logic.</p>
+</blockquote>
+<h2>Messages</h2>
+<p><code>CodedError</code> also provides for pretty well-formatted <code>message</code> properties, modeled somewhat after Node.js's message formats.
+By default, they don't include newlines or carriage returns, but provide as much detail of the error chain as possible as a simple string.</p>
+<pre class="prettyprint source lang-javascript"><code>const BadError = CodedError({code: 'E_BAD'})
+
+console.log(new BadError('foobar').message)
+// 'E_BAD: foobar'
+
+console.log(new BadError().message)
+'E_BAD: NO_MESSAGE'
+</code></pre>
+<h2>Causes</h2>
+<p><code>CodedError</code> not only supports a <code>code</code> property, but also a <code>cause</code> property, which can be either an array or non-array.
+This provides for a cause chain, exactly in the same manner as Java's base <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Exception.html"><code>java.lang.Exception</code> class</a>.</p>
+<pre class="prettyprint source lang-javascript"><code>console.log(new BadError({msg: 'this is bad', cause: new BadError('this is why')}).message)
+// 'E_BAD: this is bad: E_BAD: this is why'
+
+console.log(new BadError({msg: 'this is bad', cause: new Error('this is why')}).message)
+// 'E_BAD: this is bad: this is why'
+
+console.log(new BadError({msg: 'this is bad', cause: 13}).message)
+// 'E_BAD: this is bad: 13'
+</code></pre>
+<h2>Contextual information</h2>
+<p><code>CodedError</code> also gives you a property, called <code>info</code>, to place arbitrary, contextual information that could be relevant to the error at hand.</p>
+<pre class="prettyprint source lang-javascript"><code>new BadError({
+  msg: 'this is bad',
+  info: {
+    foo: 'bar',
+    sna: { fu: 'goo' }
+  }
+})
+</code></pre>
+<h2>Serializing</h2>
+<p><code>CodedError</code> provides to convenient methods for converting itself to a POJO (plain, old JavaScript object).</p>
+<h3><code>toObject</code></h3>
+<p>Use the <code>toObject</code> method to convert the <code>CodedError</code> chain to a POJO.
+By default, the <code>stack</code> property is omitted transitively, but you can override that behavior via arguments to <code>toObject</code>.</p>
+<pre class="prettyprint source lang-jvaascript"><code>console.log(new BadError({
+  msg: 'this is bad',
+  info: {
+    foo: 'bar',
+    sna: { fu: 'goo' }
+  }
+}).toObject()
+)
+
+// returns:
+// {
+//   name: 'BadError',
+//   code: 'E_BAD',
+//   cause: undefined,
+//   info: { foo: 'bar', sna: { fu: 'goo' } },
+//   message: 'E_BAD: this is bad',
+//   stack: null
+// }
+</code></pre>
+<h3><code>toJson</code></h3>
+<p>Since many folks log JSON to their log channels, <code>CodedError</code> has a convenient method that <em>tries</em> to <code>JSON.stringify()</code> itself.
+Note that this is not the same as JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior"><code>toJSON</code></a> protocol method.</p>
+<pre class="prettyprint source lang-javascript"><code>new BadError({
+  msg: 'this is bad',
+  info: {
+    foo: 'bar',
+    sna: { fu: 'goo' }
+  }
+}).toJson({ spaces: 2 }) // NOTE: this is NOT the same as toJSON!
+
+// logs:
+// {
+//   &quot;name&quot;: &quot;BadError&quot;,
+//   &quot;code&quot;: &quot;E_BAD&quot;,
+//   &quot;info&quot;: {
+//     &quot;foo&quot;: &quot;bar&quot;,
+//     &quot;sna&quot;: {
+//       &quot;fu&quot;: &quot;goo&quot;
+//     }
+//   },
+//   &quot;message&quot;: &quot;E_BAD: this is bad&quot;,
+//   &quot;stack&quot;: null
+// }
+</code></pre>
+<blockquote>
+<p>NOTE: if you want to opt in to the <code>toJSON</code> protocol, simply have <code>toJSON</code> delegate to <code>toObject</code>.</p>
+</blockquote>
+<h4>Omitted properties in JSON</h4>
+<p>Notice how <code>stack</code> is omitted by default.  A couple things about that:</p>
+<ol>
+<li><code>stack</code> is omitted by default, because you usually only want stack traces in development, so the library makes a conservative choice here.
+Use your own configuration to decide what you'll be omitting in your system when logging.</li>
+<li>You can omit any properties recursively that you want.
+It's just that the default is <code>['stack']</code>.</li>
+<li>Omitted properties are omitted all the way down the error chain, except in your <code>info</code> context objects.
+If properties need to be omitted in your <code>info</code> context objects, don't include them.</li>
+<li>When a property is omitted, the property <em>name</em> remains in the stringified object, but it's <em>value</em> is set to <code>null</code>, which is intended to express that the property was present but actively supressed.</li>
+</ol>
+<h4>Errors when handling errors</h4>
+<p>Sometimes, there could be circular references in the cause chain or any of the chain's <code>info</code> properties.
+Since you don't want your error handling to be throwing <code>Error</code>s when logging, <code>toJson</code> is <em>guaranteed</em> to always return valid JSON.
+If <code>JSON.stringify</code> worked, you'll get that result, but if it throws, you'll get a fallback string that is the JSON representation of the following, subject to your desired omissions:</p>
+<pre class="prettyprint source lang-javascript"><code>{
+  jsonStringifyError: {
+    message: '...',
+    name: '...',
+    code: '...',
+    stack: '...'
+  },
+  error: {
+    message: '...',
+    name: '...',
+    code: '...',
+    stack: '...'
+  }
+}
+</code></pre>
+<p>Here's an example.</p>
+<pre class="prettyprint source lang-javascript"><code>const info = {}
+info.circular = info // circular reference
+
+console.log(new BadError({
+  msg: 'this is bad',
+  info
+}).toJson({ spaces: 2 }))
+
+// logs:
+// {
+//   &quot;jsonStringifyError&quot;: {
+//     &quot;message&quot;: &quot;Converting circular structure to JSON&quot;,
+//     &quot;name&quot;: &quot;TypeError&quot;,
+//     &quot;stack&quot;: null
+//   },
+//   &quot;error&quot;: {
+//     &quot;message&quot;: &quot;E_BAD: this is bad&quot;,
+//     &quot;code&quot;: &quot;E_BAD&quot;,
+//     &quot;name&quot;: &quot;BadError&quot;,
+//     &quot;stack&quot;: null
+//   }
+}
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CodedError.html">CodedError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#defineErrorClass">defineErrorClass</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Aug 14 2020 17:17:53 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

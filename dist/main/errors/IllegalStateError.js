@@ -1,0 +1,15 @@
+'use strict';
+
+const CodedError = require('./CodedError');
+/**
+ * Error class indicating that something is in an illegal state.
+ * @typedef {object} IllegalStateError
+ * @extends CodedError
+ */
+
+
+const E = CodedError({
+  name: 'IllegalStateError'
+});
+module.exports = E;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tYWluL2Vycm9ycy9JbGxlZ2FsU3RhdGVFcnJvci5qcyJdLCJuYW1lcyI6WyJDb2RlZEVycm9yIiwicmVxdWlyZSIsIkUiLCJuYW1lIiwibW9kdWxlIiwiZXhwb3J0cyJdLCJtYXBwaW5ncyI6IkFBQUE7O0FBRUEsTUFBTUEsVUFBVSxHQUFHQyxPQUFPLENBQUMsY0FBRCxDQUExQjtBQUVBOzs7Ozs7O0FBS0EsTUFBTUMsQ0FBQyxHQUFHRixVQUFVLENBQUM7QUFBRUcsRUFBQUEsSUFBSSxFQUFFO0FBQVIsQ0FBRCxDQUFwQjtBQUVBQyxNQUFNLENBQUNDLE9BQVAsR0FBaUJILENBQWpCIiwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBzdHJpY3QnXG5cbmNvbnN0IENvZGVkRXJyb3IgPSByZXF1aXJlKCcuL0NvZGVkRXJyb3InKVxuXG4vKipcbiAqIEVycm9yIGNsYXNzIGluZGljYXRpbmcgdGhhdCBzb21ldGhpbmcgaXMgaW4gYW4gaWxsZWdhbCBzdGF0ZS5cbiAqIEB0eXBlZGVmIHtvYmplY3R9IElsbGVnYWxTdGF0ZUVycm9yXG4gKiBAZXh0ZW5kcyBDb2RlZEVycm9yXG4gKi9cbmNvbnN0IEUgPSBDb2RlZEVycm9yKHsgbmFtZTogJ0lsbGVnYWxTdGF0ZUVycm9yJyB9KVxuXG5tb2R1bGUuZXhwb3J0cyA9IEVcbiJdfQ==
