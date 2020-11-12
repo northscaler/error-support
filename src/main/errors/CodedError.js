@@ -192,9 +192,11 @@ class CodedError extends Error {
     return Object.keys(this).concat(['message', 'stack'])
       .reduce((accum, key) => {
         if (key === 'cause') { // possibly recurse here
-          accum.cause = omitting.includes(key) ? CodedError.OMISSION : CodedError._anyToObject({
-            item: this.cause, omitting
-          })
+          accum.cause = omitting.includes(key)
+            ? CodedError.OMISSION
+            : CodedError._anyToObject({
+              item: this.cause, omitting
+            })
           return accum
         }
         return CodedError._setOrOmit({ omitting, on: accum, from: this, key })
